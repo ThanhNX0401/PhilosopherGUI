@@ -1,10 +1,10 @@
 from PyQt6 import QtCore
 import time
 import sys
-from PyQt6 import QtWidgets,QtCore
+from PyQt6 import QtWidgets,QtCore, QtGui
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt6.QtCore import pyqtSignal
-from NewUI import Ui_MainWindow
+from fileUI import Ui_MainWindow
 import threading
 
 class MainWindow(QWidget):
@@ -33,11 +33,10 @@ class MainWindow(QWidget):
         self.uic.Button2.clicked.connect(self.on_Button2_clicked)
         self.uic.Button3.clicked.connect(self.on_Button3_clicked)
         self.uic.Button4.clicked.connect(self.on_Button4_clicked)
-        
         self.uic.Start_button.clicked.connect(self.start)
         #self.uic.Button0.clicked.connect(lambda: self.philosopher_0_status()) # vao ham chuyen trang thai
         #self.uic.Button1.clicked.connect(self.philosopher_2_status)
-        
+                
     def start(self):
         num_philosophers = 5
         forks = [Fork(i) for i in range(num_philosophers)]
@@ -52,6 +51,7 @@ class MainWindow(QWidget):
         self.uic.Button2.setEnabled(True)
         self.uic.Button3.setEnabled(True)
         self.uic.Button4.setEnabled(True)
+        self.uic.Start_button.setEnabled(False)
         
     def on_Button0_clicked(self):
         self.Button0_event.set()
@@ -69,27 +69,36 @@ class MainWindow(QWidget):
         i=self.sender().id
         if i==0: 
             button=self.uic.Button0
+            face=self.uic.phi1
         elif i==1:
             button=self.uic.Button1
+            face=self.uic.phi2
         elif i==2:
             button=self.uic.Button2
+            face=self.uic.phi3
         elif i==3:
             button=self.uic.Button3
+            face=self.uic.phi4
         else:
             button=self.uic.Button4
+            face=self.uic.phi5
         
         if status=="Thinking":
             button.setEnabled(True)
             button.setStyleSheet("background-color: green")
             button.setText("Thinking")
+            face.setPixmap(QtGui.QPixmap(("image/phi_thinking0.jpg")))
+            
         elif status=="Waiting":
             button.setStyleSheet("background-color: yellow")
             button.setText("Waiting")
             button.setEnabled(False)
+            face.setPixmap(QtGui.QPixmap(("image/phi_waiting0.jpg")))
         else:
             button.setEnabled(True)
             button.setStyleSheet("background-color: red")
             button.setText("Eating")
+            face.setPixmap(QtGui.QPixmap(("image/phi_eating0.jpg")))
             
             
     def philosopher_0(self,fork0,fork1):
