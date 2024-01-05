@@ -261,14 +261,12 @@ class Philosopher(QtCore.QThread): #Thread class
             self.status = "Thinking"
             self.change_status_signal.emit(self.status)
             print(f"Philosopher {self.id + 1} is thinking.")
-            #self.locking.lock()  # Acquire the lock
+
             self.button_event.wait()
             if not self.is_running:  # Check the flag after waiting
-                return# Wait for the button signal
+                return              # Wait for the stop button signal
             self.button_event.clear()
-            #self.locking.unlock()
-            
-            #if not self.button_event.isSet():  # Check if the button is already triggered
+
             print(f"button {self.id} clicked")
             self.status = "Waiting"  
             self.change_status_signal.emit(self.status)
@@ -285,14 +283,12 @@ class Philosopher(QtCore.QThread): #Thread class
             self.button_event.clear()
             self.status = "Eating"
             self.change_status_signal.emit(self.status)
-            #self.locking.lock()  # Acquire the lock
+
             self.button_event.wait()
             if not self.is_running:  # Check the flag after waiting
-                return# Wait for the button signal
+                return              # Wait for the stop button signal
             self.button_event.clear()
-            #self.locking.unlock()
-        
-            #if not self.button_event.isSet():  # Check if the button is already triggered
+
             print(f"button {self.id} clicked")
             self.put_down_left_fork_signal.emit(self.left_fork)
             self.left_fork.put_down()
